@@ -2,7 +2,6 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 
 from django.db import models
-from django.urls import reverse
 from django.utils import timezone
 
 
@@ -45,9 +44,6 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
-
-    def get_absolute_url(self):
-        return reverse('page_user', kwargs={'pk': str(self.pk)})
 
     class Meta:
         verbose_name = 'User'
