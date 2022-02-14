@@ -14,7 +14,7 @@ class Task(models.Model):
         blank=True,
     )
     creation_date = models.DateTimeField('Creation date', auto_now_add=True)
-    assignee = models.ForeignKey(get_user_model(), verbose_name='Assignee', on_delete=models.CASCADE, blank=True, null=True)
+    owner = models.ForeignKey(get_user_model(), verbose_name='Owner', on_delete=models.CASCADE, blank=True, null=True)
     slug = models.SlugField('Slug', unique=True, db_index=True, max_length=255)
 
     def __str__(self):

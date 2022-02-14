@@ -1,8 +1,9 @@
+from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 
 from .models import Task
-from .forms import TaskForm
+from .forms import TaskForm, UserForm
 
 
 class HomeTaskListView(ListView):
@@ -42,3 +43,20 @@ class TaskCreateView(CreateView):
     form_class = TaskForm
     context_object_name = 'task_create'
     template_name = 'tasks/task_create.html'
+
+
+class UserDetailView(DetailView):
+    model = get_user_model()
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
+    context_object_name = 'user_detail'
+    template_name = 'tasks/user_detail.html'
+
+
+class UserUpdateView(UpdateView):
+    model = get_user_model()
+    form_class = UserForm
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
+    context_object_name = 'user_update'
+    template_name = 'tasks/user_edit.html'

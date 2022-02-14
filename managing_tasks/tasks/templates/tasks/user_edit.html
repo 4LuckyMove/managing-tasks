@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit User | Task Tracker{% endblock title %}
+
+{% block other-stylesheet %}{% endblock other-stylesheet %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-sm-12 col-xl-12">
+        <div class="bg-light rounded h-100 p-4">
+            <h6 class="mb-4">Edit User</h6>
+            <form action="." method="post">
+                {% csrf_token %}
+                <span class="form-error text-danger">{{ form.non_field_errors }}</span>
+                <div class="form-floating mb-3">
+                    {{ form.username }}
+                    <label for="{{ form.username.id_for_label }}">Username</label>
+                    <span class="form-error text-danger">{{ form.username.errors }}</span>
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form.email }}
+                    <label for="{{ form.email.id_for_label }}">E-mail</label>
+                    <span class="form-error text-danger">{{ form.email.errors }}</span>
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form.first_name }}
+                    <label for="{{ form.first_name.id_for_label }}">First Name</label>
+                    <span class="form-error text-danger">{{ form.first_name.errors }}</span>
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form.last_name }}
+                    <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+                    <span class="form-error text-danger">{{ form.last_name.errors }}</span>
+                </div>
+                <div class="row form-floating justify-content-center">
+                    <div class="col-sm-4 col-xl-2">
+                        <button type="submit" class="btn btn-success rounded-pill m-2 col-sm-12 col-xl-12">Save</button>
+                    </div>
+                    <div class="col-sm-4 col-xl-2">
+                        <a href="{% url 'user_detail' user_update.username %}" class="btn btn-outline-secondary rounded-pill m-2 col-sm-12 col-xl-12">
+                            Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block other-javascript %}{% endblock other-javascript %}

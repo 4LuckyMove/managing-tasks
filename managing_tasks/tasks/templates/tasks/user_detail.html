@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ user_detail.username }} | Task Tracker{% endblock title %}
+
+{% block other-stylesheet %}{% endblock other-stylesheet %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-sm-12 col-xl-12">
+        <div class="bg-light rounded h-100 p-4">
+            <h6 class="mb-4">User Detail</h6>
+            <div class="alert alert-secondary" role="alert">
+                <div class="row g-2">
+                    <div class="col-sm-12 col-xl-2">
+                        <strong>Username:</strong>
+                    </div>
+                    <div class="col-sm-12 col-xl-10">
+                        {{ user_detail.username }}
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-secondary" role="alert">
+                <div class="row g-2">
+                    <div class="col-sm-12 col-xl-2">
+                        <strong>E-mail:</strong>
+                    </div>
+                    <div class="col-sm-12 col-xl-10">
+                        {{ user_detail.email }}
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-secondary" role="alert">
+                <div class="row g-2">
+                    <div class="col-sm-12 col-xl-2">
+                        <strong>First Name:</strong>
+                    </div>
+                    <div class="col-sm-12 col-xl-10">
+                        {{ user_detail.first_name }}
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-secondary" role="alert">
+                <div class="row g-2">
+                    <div class="col-sm-12 col-xl-2">
+                        <strong>Last Name:</strong>
+                    </div>
+                    <div class="col-sm-12 col-xl-10">
+                        {{ user_detail.last_name }}
+                    </div>
+                </div>
+            </div>
+            <div class="row form-floating justify-content-center">
+                <div class="col-sm-4 col-xl-2">
+                    <a href="{% url 'user_update' user_detail.username %}" class="btn btn-info rounded-pill m-2 col-sm-12 col-xl-12">
+                        Edit
+                    </a>
+                </div>
+                <div class="col-sm-4 col-xl-2">
+                    <a href="{% url 'password_change' %}" class="btn btn-outline-primary rounded-pill m-2 col-sm-12 col-xl-12">
+                        Change Password
+                    </a>
+                </div>
+                <div class="col-sm-4 col-xl-2">
+                    <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill m-2 col-sm-12 col-xl-12">
+                        Back to Homepage
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block other-javascript %}{% endblock other-javascript %}
