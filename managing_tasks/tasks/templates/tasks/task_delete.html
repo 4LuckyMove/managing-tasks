@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Delete Task | Task Tracker{% endblock title %}
+
+{% block other-stylesheet %}{% endblock other-stylesheet %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-sm-12 col-xl-12">
+        <div class="bg-light rounded h-100 p-4">
+            <h6 class="mb-4">Delete Task</h6>
+            <form action="." method="post">
+                {% csrf_token %}
+                <span class="form-error text-danger">{{ form.non_field_errors }}</span>
+                <div class="form-floating mb-3">
+                    <div class="alert alert-danger" role="alert">
+                        Are you sure you want to delete the task - <b>{{ task_delete.title }}</b>?
+                    </div>
+                </div>
+                <div class="row form-floating justify-content-center">
+                    <div class="col-sm-4 col-xl-2">
+                        <button type="submit" class="btn btn-success rounded-pill m-2 col-sm-12 col-xl-12">Confirm</button>
+                    </div>
+                    <div class="col-sm-4 col-xl-2">
+                        <a href="{% url 'task_detail' task_delete.slug %}" class="btn btn-outline-secondary rounded-pill m-2 col-sm-12 col-xl-12">
+                            Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block other-javascript %}{% endblock other-javascript %}

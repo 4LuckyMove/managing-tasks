@@ -60,7 +60,7 @@
 
             <div class="navbar-nav align-items-center ms-auto">
                 <div class="nav-item dropdown me-lg-3">
-                    <a href="#" class="nav-link">
+                    <a href="{% url 'task_create' %}" class="nav-link">
                         <i class="fas fa-tasks me-lg-2"></i>
                         <span class="d-none d-lg-inline-flex">New task</span>
                     </a>
@@ -77,10 +77,10 @@
                         <a href="{% url 'logout' %}" class="dropdown-item">Log Out</a>
                     </div>
                     {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-square btn-outline-primary m-2">
+                    <a href="{% url 'login' %}" class="btn btn-sm btn-sm-square btn-outline-dark m-2">
                         <i class="fas fa-sign-in-alt"></i>
                     </a>
-                    <a href="{% url 'signup' %}" class="btn btn-square btn-outline-primary m-2">
+                    <a href="{% url 'signup' %}" class="btn btn-sm btn-sm-square btn-outline-dark m-2">
                         <i class="fas fa-user-plus"></i>
                     </a>
                     {% endif %}

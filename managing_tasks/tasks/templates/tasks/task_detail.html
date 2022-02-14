@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ task_detail.title }} | Task Tracker{% endblock title %}
+
+{% block other-stylesheet %}{% endblock other-stylesheet %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-sm-12 col-xl-12">
+        <div class="bg-light rounded h-100 p-4">
+            <h6 class="mb-4">Task Detail</h6>
+            <div class="alert alert-secondary" role="alert">
+                <div class="row g-2">
+                    <div class="col-sm-12 col-xl-2">
+                        <strong>Title:</strong>
+                    </div>
+                    <div class="col-sm-12 col-xl-10">
+                        {{ task_detail.title }}
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-secondary" role="alert">
+                <div class="row g-2">
+                    <div class="col-sm-12 col-xl-2">
+                        <strong>Description:</strong>
+                    </div>
+                    <div class="col-sm-12 col-xl-10">
+                        {{ task_detail.description }}
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-secondary" role="alert">
+                <div class="row g-2">
+                    <div class="col-sm-12 col-xl-2">
+                        <strong>Status:</strong>
+                    </div>
+                    <div class="col-sm-12 col-xl-10">
+                        {{ task_detail.get_status_display }}
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-secondary" role="alert">
+                <div class="row g-2">
+                    <div class="col-sm-12 col-xl-2">
+                        <strong>Creation Date:</strong>
+                    </div>
+                    <div class="col-sm-12 col-xl-10">
+                        {{ task_detail.creation_date | date:"d.m.Y" }}
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-secondary" role="alert">
+                <div class="row g-2">
+                    <div class="col-sm-12 col-xl-2">
+                        <strong>Creation Time:</strong>
+                    </div>
+                    <div class="col-sm-12 col-xl-10">
+                        {{ task_detail.creation_date | date:"H:i" }}
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-secondary" role="alert">
+                <div class="row g-2">
+                    <div class="col-sm-12 col-xl-2">
+                        <strong>Assignee:</strong>
+                    </div>
+                    <div class="col-sm-12 col-xl-10">
+                        {{ task_detail.assignee.username }}
+                    </div>
+                </div>
+            </div>
+            <div class="row form-floating justify-content-center">
+                <div class="col-sm-4 col-xl-2">
+                    <a href="{% url 'task_update' task_detail.slug %}" class="btn btn-info rounded-pill m-2 col-sm-12 col-xl-12">
+                        Edit
+                    </a>
+                </div>
+                <div class="col-sm-4 col-xl-2">
+                    <a href="{% url 'task_delete' task_detail.slug %}" class="btn btn-outline-danger rounded-pill m-2 col-sm-12 col-xl-12">
+                        Delete
+                    </a>
+                </div>
+                <div class="col-sm-4 col-xl-2">
+                    <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill m-2 col-sm-12 col-xl-12">
+                        Back to Homepage
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block other-javascript %}{% endblock other-javascript %}
