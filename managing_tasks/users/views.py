@@ -14,7 +14,10 @@ from .forms import (
 class CustomUserLoginView(views.LoginView):
     form_class = CustomUserAuthenticationForm
     template_name = 'registration/login.html'
-    success_url = reverse_lazy('home')
+    redirect_authenticated_user = True
+
+    def get_success_url(self):
+        return reverse_lazy('home')
 
 
 class CustomUserLogoutView(views.LogoutView):

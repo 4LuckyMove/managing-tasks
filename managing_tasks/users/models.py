@@ -47,7 +47,7 @@ class CustomUser(AbstractUser):
         return self.email
 
     def get_absolute_url(self):
-        return reverse('user_detail', kwargs={'username': str(self.username)})
+        return reverse('user_detail', kwargs={'user_name': str(self.username)})
 
     class Meta:
         verbose_name = 'User'

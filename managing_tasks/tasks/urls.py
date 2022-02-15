@@ -5,11 +5,13 @@ from .views import (
 )
 
 urlpatterns = [
-    path('<slug:username>/update/', UserUpdateView.as_view(), name='user_update'),
-    path('<slug:username>/', UserDetailView.as_view(), name='user_detail'),
     path('new/', TaskCreateView.as_view(), name='task_create'),
-    path('<slug:slug>/', TaskDetailView.as_view(), name='task_detail'),
-    path('<slug:slug>/update/', TaskUpdateView.as_view(), name='task_update'),
-    path('<slug:slug>/delete/', TaskDeleteView.as_view(), name='task_delete'),
+    path('task-<int:pk>/', TaskDetailView.as_view(), name='task_detail'),
+    path('task-<int:pk>/update/', TaskUpdateView.as_view(), name='task_update'),
+    path('task-<int:pk>/delete/', TaskDeleteView.as_view(), name='task_delete'),
+
+    path('<slug:user_name>/update/', UserUpdateView.as_view(), name='user_update'),
+    path('<slug:user_name>/', UserDetailView.as_view(), name='user_detail'),
+
     path('', HomeTaskListView.as_view(), name='home'),
 ]

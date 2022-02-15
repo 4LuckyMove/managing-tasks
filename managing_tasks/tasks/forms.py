@@ -26,7 +26,7 @@ class TaskForm(forms.ModelForm):
                 attrs={
                     'class': 'form-select',
                 }
-            )
+            ),
         }
 
 

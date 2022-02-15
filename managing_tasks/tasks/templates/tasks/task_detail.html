@@ -63,21 +63,25 @@
             <div class="alert alert-secondary" role="alert">
                 <div class="row g-2">
                     <div class="col-sm-12 col-xl-2">
-                        <strong>Assignee:</strong>
+                        <strong>Owner:</strong>
                     </div>
                     <div class="col-sm-12 col-xl-10">
-                        {{ task_detail.assignee.username }}
+                        {% if not task_detail.owner.first_name and not task_detail.owner.last_name %}
+                        {{ task_detail.owner.username }}
+                        {% else %}
+                        {{ task_detail.owner.first_name }} {{ task_detail.owner.last_name }}
+                        {% endif %}
                     </div>
                 </div>
             </div>
             <div class="row form-floating justify-content-center">
                 <div class="col-sm-4 col-xl-2">
-                    <a href="{% url 'task_update' task_detail.slug %}" class="btn btn-info rounded-pill m-2 col-sm-12 col-xl-12">
+                    <a href="{% url 'task_update' task_detail.pk %}" class="btn btn-info rounded-pill m-2 col-sm-12 col-xl-12">
                         Edit
                     </a>
                 </div>
                 <div class="col-sm-4 col-xl-2">
-                    <a href="{% url 'task_delete' task_detail.slug %}" class="btn btn-outline-danger rounded-pill m-2 col-sm-12 col-xl-12">
+                    <a href="{% url 'task_delete' task_detail.pk %}" class="btn btn-outline-danger rounded-pill m-2 col-sm-12 col-xl-12">
                         Delete
                     </a>
                 </div>
