@@ -6,4 +6,4 @@ from .models import Task
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'status', 'creation_date', )
     list_display_links = ('title', )
-    list_filter = ('creation_date', )
+    list_filter = ('creation_date', 'status', )

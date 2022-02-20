@@ -15,9 +15,20 @@ class HomeTaskListView(LoginRequiredMixin, ListView):
     ordering = ['-creation_date']
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(HomeTaskListView, self).get_context_data(**kwargs)
         context['task_list'] = context['task_list'].filter(owner=self.request.user)
         return context
+
+    def get_queryset(self):
+        if self.request.GET.get('q') == None:
+            status_filter = Task.objects.all()
+        elif self.request.GET.get('q') != None:
+            q = self.request.GET.get('q')
+            status_filter = Task.objects.filter(status__iexact=q)
+        else:
+            q = ''
+            status_filter = Task.objects.filter(status__iexact=q)
+        return status_filter
 
 
 class TaskDetailView(LoginRequiredMixin, DetailView):
@@ -33,7 +44,6 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
     form_class = TaskForm
     template_name = 'tasks/task_edit.html'
     login_url = 'login'
-    success_url = reverse_lazy('task_detail')
 
     def test_func(self):
         obj = self.get_object()
@@ -81,7 +91,6 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     context_object_name = 'user_update'
     template_name = 'tasks/user_edit.html'
     login_url = 'login'
-    success_url = reverse_lazy('user_detail')
 
     def test_func(self):
         obj = self.get_object()

@@ -5,16 +5,24 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Task(models.Model):
+    NOT_COMPLETED = 'Not completed'
+    COMPLETED = 'Сompleted'
+
     title = models.CharField('Title', max_length=150)
     description = models.TextField('Description')
     status = models.CharField(
         'Status',
-        choices=[('', 'Not completed'), ('1', 'Сompleted')],
-        max_length=1,
-        blank=True,
+        choices=[('not completed', NOT_COMPLETED), ('completed', COMPLETED), ],
+        max_length=13,
     )
     creation_date = models.DateTimeField('Creation date', auto_now_add=True)
-    owner = models.ForeignKey(get_user_model(), verbose_name='Owner', on_delete=models.CASCADE, blank=True, null=True)
+    owner = models.ForeignKey(
+        get_user_model(),
+        verbose_name='Owner',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
         return self.title
