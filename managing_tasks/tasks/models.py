@@ -12,7 +12,7 @@ class Task(models.Model):
     description = models.TextField('Description')
     status = models.CharField(
         'Status',
-        choices=[('not completed', NOT_COMPLETED), ('completed', COMPLETED), ],
+        choices=[('not-completed', NOT_COMPLETED), ('completed', COMPLETED), ],
         max_length=13,
     )
     creation_date = models.DateTimeField('Creation date', auto_now_add=True)

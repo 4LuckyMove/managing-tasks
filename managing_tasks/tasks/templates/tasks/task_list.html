@@ -3,7 +3,10 @@
 
 {% block title %}Task Tracker{% endblock title %}
 
-{% block other-stylesheet %}{% endblock other-stylesheet %}
+{% block other-stylesheet %}
+<!-- daterange picker -->
+<link rel="stylesheet" href="{% static 'tasks/js/daterangepicker/daterangepicker.css' %}">
+{% endblock other-stylesheet %}
 
 {% block content %}
 <div class="row g-4">
@@ -47,46 +50,140 @@
         <div class="bg-light rounded h-100 p-4">
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <h6 class="mb-0">Filter</h6>
-                <a href="#">Reset Filter</a>
+                <a href="{% url 'home' %}">Reset Filter</a>
             </div>
-            <div class="alert alert-secondary" role="alert">
-                <span class="mb-0">By Date</span>
-                <hr>
-                <div class="col-sm-12 col-xl-2">
-
-                    <div class="form-group">
-                        <label>Date range:</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    <i class="far fa-calendar-alt"></i>
-                                </span>
+            <form action="{% url 'home' %}" method="get" name="filter">
+                <div class="alert alert-secondary" role="alert">
+                    <span class="mb-0">By Date</span>
+                    <hr>
+                    <div class="form-group mb-3">
+                        <label>Start Date:</label>
+                        <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                            <div class="input-group-text" data-target="#reservationdate" data-toggle="datetimepicker">
+                                <i class="fa fa-calendar"></i>
                             </div>
-                            <input type="text" class="form-control float-right" id="reservation">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate"
+                                   name="startDate" placeholder="DD.MM.YYYY" value="{{start_date}}"/>
                         </div>
                     </div>
-
+                    <div class="form-group mb-3">
+                        <label>End Date:</label>
+                        <div class="input-group date" id="reservationdate1" data-target-input="nearest">
+                            <div class="input-group-text" data-target="#reservationdate1" data-toggle="datetimepicker">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate1"
+                                   name="endDate" placeholder="DD.MM.YYYY" value="{{end_date}}"/>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="alert alert-secondary" role="alert">
-                <span class="mb-0">By Status</span>
-                <div class="col-sm-12 col-xl-12 mt-2">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item bg-transparent">
-                            <a href="{% url 'home' %}">All</a>
-                        </li>
-                        <li class="list-group-item bg-transparent">
-                            <a href="{% url 'home' %}?q=completed" name="q">Completed</a>
-                        </li>
-                        <li class="list-group-item bg-transparent">
-                            <a href="{% url 'home' %}?q=not completed" name="q">Not Completed</a>
-                        </li>
-                    </ul>
+                <div class="alert alert-secondary" role="alert">
+                    <span class="mb-0">By Status</span>
+                    <div class="col-sm-12 col-xl-12 mt-2">
+                        <div class="form-check mb-0" id="clearfix1" name="q">
+                            <input class="form-check-input" type="radio" name="q"
+                                   id="radioCompleted" data-target="clearfix1" value="completed"
+                                   {% if by_status == 'completed' %} checked {% endif %}>
+                            <label class="form-check-label" for="radioCompleted" data-target="clearfix1">
+                                Completed
+                            </label>
+                        </div>
+                        <div class="form-check mb-3" id="clearfix2" name="q">
+                            <input class="form-check-input" type="radio" name="q"
+                                   id="radioNotCompleted" data-target="clearfix2" value="not-completed"
+                                   {% if by_status == 'not-completed' %} checked {% endif %}>
+                            <label class="form-check-label" for="radioNotCompleted" data-target="clearfix2">
+                                Not Completed
+                            </label>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <div class="alert alert-secondary" role="alert">
+                    <div class="row">
+                        <div class="col-sm-6 col-xl-6">
+                            <button type="submit" class="btn btn-outline-success btn-sm col-12">Search</button>
+                        </div>
+                        <div class="col-sm-6 col-xl-6">
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-sm col-12">Reset</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 {% endblock content %}
 
-{% block other-javascript %}{% endblock other-javascript %}
+{% block other-javascript %}
+<!-- Select2 -->
+<script src="{% static 'tasks/js/select2/js/select2.full.min.js' %}"></script>
+<!-- InputMask -->
+<script src="{% static 'tasks/js/moment/moment.min.js' %}"></script>
+<script src="{% static 'tasks/js//inputmask/jquery.inputmask.min.js' %}"></script>
+<!-- date-range-picker -->
+<script src="{% static 'tasks/js/daterangepicker/daterangepicker.js' %}"></script>
+<script>
+    $(function () {
+        //Initialize Select2 Elements
+        $('.select2').select2()
+
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        })
+
+        //Datemask dd/mm/yyyy
+        $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+        //Datemask2 mm/dd/yyyy
+        $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+        //Money Euro
+        $('[data-mask]').inputmask()
+
+        //Date picker
+        $('#reservationdate').datetimepicker({
+            format: 'DD.MM.YYYY'
+        });
+        //Date picker
+        $('#reservationdate1').datetimepicker({
+            format: 'DD.MM.YYYY'
+        });
+
+        //Date and time picker
+        $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+
+        //Date range picker
+        $('#reservation').daterangepicker()
+        //Date range picker with time picker
+        $('#reservationtime').daterangepicker({
+            timePicker: true,
+            timePickerIncrement: 30,
+            locale: {
+                format: 'MM/DD/YYYY hh:mm A'
+            }
+        })
+        //Date range as a button
+        $('#daterange-btn').daterangepicker(
+            {
+                ranges   : {
+                    'Today'       : [moment(), moment()],
+                    'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                startDate: moment().subtract(29, 'days'),
+                endDate  : moment()
+            },
+            function (start, end) {
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+            }
+        )
+
+        //Timepicker
+        $('#timepicker').datetimepicker({
+            format: 'LT'
+        })
+    })
+</script>
+{% endblock other-javascript %}

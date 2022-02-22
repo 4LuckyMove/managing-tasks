@@ -1,5 +1,7 @@
+from datetime import datetime
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 
@@ -17,18 +19,34 @@ class HomeTaskListView(LoginRequiredMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(HomeTaskListView, self).get_context_data(**kwargs)
         context['task_list'] = context['task_list'].filter(owner=self.request.user)
+        context['start_date'] = self.request.GET.get('startDate')
+        context['end_date'] = self.request.GET.get('endDate')
+        context['by_status'] = self.request.GET.get('q')
         return context
 
     def get_queryset(self):
-        if self.request.GET.get('q') == None:
-            status_filter = Task.objects.all()
-        elif self.request.GET.get('q') != None:
-            q = self.request.GET.get('q')
-            status_filter = Task.objects.filter(status__iexact=q)
+        q = self.request.GET.get('q') if self.request.GET.get('q') else None
+        start_date = datetime.strptime(self.request.GET.get('startDate'), '%d.%m.%Y').date() \
+            if self.request.GET.get('startDate') else self.request.POST.get('startDate')
+        end_date = datetime.strptime(self.request.GET.get('endDate'), '%d.%m.%Y').date() \
+            if self.request.GET.get('endDate') else self.request.POST.get('endDate')
+
+        if q != None and start_date == None and end_date == None:
+            task_filter = Task.objects.filter(status__exact=q).order_by('-creation_date')
+        elif q == None and start_date != None and end_date != None:
+            task_filter = Task.objects.filter(
+                Q(creation_date__date__range=[start_date, end_date]) |
+                Q(creation_date__date__range=[end_date, start_date])
+            ).order_by('-creation_date')
+        elif q != None and start_date != None and end_date != None:
+            task_filter = Task.objects.filter(
+                Q(status__exact=q, creation_date__date__range=[start_date, end_date]) |
+                Q(status__exact=q, creation_date__date__range=[end_date, start_date])
+            ).order_by('-creation_date')
         else:
-            q = ''
-            status_filter = Task.objects.filter(status__iexact=q)
-        return status_filter
+            task_filter = Task.objects.all().order_by('-creation_date')
+
+        return task_filter
 
 
 class TaskDetailView(LoginRequiredMixin, DetailView):
