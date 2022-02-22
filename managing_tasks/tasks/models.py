@@ -14,6 +14,7 @@ class Task(models.Model):
         'Status',
         choices=[('not-completed', NOT_COMPLETED), ('completed', COMPLETED), ],
         max_length=13,
+        default='not-completed'
     )
     creation_date = models.DateTimeField('Creation date', auto_now_add=True)
     owner = models.ForeignKey(
