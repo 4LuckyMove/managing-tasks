@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     HomeTaskListView, TaskDetailView, TaskUpdateView, TaskDeleteView, TaskCreateView,
     UserDetailView, UserUpdateView,
-
+    AssignedUserCreateView,
 )
 
 urlpatterns = [
@@ -10,9 +10,11 @@ urlpatterns = [
     path('task-<int:pk>/', TaskDetailView.as_view(), name='task_detail'),
     path('task-<int:pk>/update/', TaskUpdateView.as_view(), name='task_update'),
     path('task-<int:pk>/delete/', TaskDeleteView.as_view(), name='task_delete'),
+    path('assegnee/create/', AssignedUserCreateView.as_view(), name='assignee_create'),
 
-    path('<slug:user_name>/update/', UserUpdateView.as_view(), name='user_update'),
-    path('<slug:user_name>/', UserDetailView.as_view(), name='user_detail'),
+    path('user-<int:pk>/', UserDetailView.as_view(), name='user_detail'),
+    path('user-<int:pk>/update/', UserUpdateView.as_view(), name='user_update'),
+
 
     path('', HomeTaskListView.as_view(), name='home'),
 ]

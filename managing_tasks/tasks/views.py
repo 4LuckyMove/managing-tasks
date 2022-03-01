@@ -5,8 +5,8 @@ from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 
-from .models import Task
-from .forms import TaskForm, UserForm
+from .models import Task, AssignUserTask
+from .forms import TaskForm, UserForm, AssignedUserCreationForm
 
 
 class HomeTaskListView(LoginRequiredMixin, ListView):
@@ -18,7 +18,14 @@ class HomeTaskListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(HomeTaskListView, self).get_context_data(**kwargs)
-        context['task_list'] = context['task_list'].filter(owner=self.request.user)
+        context['task_list'] = context['task_list'].filter(
+            Q(owner=self.request.user) &
+            Q(assignee_user__isnull=False)
+        ).order_by('-creation_date')
+        context['unassigned_task_list'] = Task.objects.filter(
+            Q(owner=self.request.user) &
+            Q(assignee_user__isnull=True)
+        ).order_by('-creation_date')
         context['start_date'] = self.request.GET.get('startDate')
         context['end_date'] = self.request.GET.get('endDate')
         context['by_status'] = self.request.GET.get('q')
@@ -32,19 +39,19 @@ class HomeTaskListView(LoginRequiredMixin, ListView):
             if self.request.GET.get('endDate') else self.request.POST.get('endDate')
 
         if q != None and start_date == None and end_date == None:
-            task_filter = Task.objects.filter(status__exact=q).order_by('-creation_date')
+            task_filter = Task.objects.filter(status__exact=q)
         elif q == None and start_date != None and end_date != None:
             task_filter = Task.objects.filter(
                 Q(creation_date__date__range=[start_date, end_date]) |
                 Q(creation_date__date__range=[end_date, start_date])
-            ).order_by('-creation_date')
+            )
         elif q != None and start_date != None and end_date != None:
             task_filter = Task.objects.filter(
                 Q(status__exact=q, creation_date__date__range=[start_date, end_date]) |
                 Q(status__exact=q, creation_date__date__range=[end_date, start_date])
-            ).order_by('-creation_date')
+            )
         else:
-            task_filter = Task.objects.all().order_by('-creation_date')
+            task_filter = Task.objects.all()
 
         return task_filter
 
@@ -88,8 +95,12 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
     login_url = 'login'
 
     def form_valid(self, form):
-        form.instance.owner = self.request.user
-        return super().form_valid(form)
+        full_name = self.request.user.first_name + ' ' + self.request.user.last_name
+        if self.request.user.first_name and self.request.user.last_name:
+            form.instance.owner = full_name
+        else:
+            form.instance.owner = self.request.user
+        return super(TaskCreateView, self).form_valid(form)
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
@@ -113,3 +124,9 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     def test_func(self):
         obj = self.get_object()
         return obj.email == self.request.user
+
+
+class AssignedUserCreateView(LoginRequiredMixin, CreateView):
+    model = get_user_model()
+    form_class = AssignedUserCreationForm
+    template_name = 'tasks/assignee_create.html'

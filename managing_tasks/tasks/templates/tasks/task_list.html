@@ -24,6 +24,7 @@
                         <th scope="col">Time</th>
                         <th scope="col">Title Task</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Assignee</th>
                         <th scope="col">Action</th>
                     </tr>
                     </thead>
@@ -34,11 +35,22 @@
                         <td>{{ task.creation_date | date:"H:i" }}</td>
                         <td>{{ task.title }}</td>
                         <td>{{ task.get_status_display }}</td>
+                        <td>
+                            {% if task.assignee_user %}
+                            {% if not task.assignee_user.user.first_name and not task.user.assignee_user.last_name %}
+                            {{ task.assignee_user }}
+                            {% else %}
+                            {{ task.assignee_user.user.first_name }} {{ task.assignee_user.user.last_name }}
+                            {% endif %}
+                            {% else %}
+                            Not Assigned
+                            {% endif %}
+                        </td>
                         <td><a class="btn btn-sm btn-primary" href="{% url 'task_detail' task.pk %}">Detail</a></td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="5" class="text-center">No Task In List</td>
+                        <td colspan="6" class="text-center">No Task In List</td>
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -59,21 +71,21 @@
                     <div class="form-group mb-3">
                         <label>Start Date:</label>
                         <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate"
+                                   name="startDate" placeholder="DD.MM.YYYY" value="{{start_date}}"/>
                             <div class="input-group-text" data-target="#reservationdate" data-toggle="datetimepicker">
                                 <i class="fa fa-calendar"></i>
                             </div>
-                            <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate"
-                                   name="startDate" placeholder="DD.MM.YYYY" value="{{start_date}}"/>
                         </div>
                     </div>
                     <div class="form-group mb-3">
                         <label>End Date:</label>
                         <div class="input-group date" id="reservationdate1" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate1"
+                                   name="endDate" placeholder="DD.MM.YYYY" value="{{end_date}}"/>
                             <div class="input-group-text" data-target="#reservationdate1" data-toggle="datetimepicker">
                                 <i class="fa fa-calendar"></i>
                             </div>
-                            <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate1"
-                                   name="endDate" placeholder="DD.MM.YYYY" value="{{end_date}}"/>
                         </div>
                     </div>
                 </div>
@@ -110,6 +122,58 @@
                 </div>
             </form>
         </div>
+    </div>
+    {% if unassigned_task_list.assignee_user == None %}
+    <div class="col-sm-12 col-xl-9">
+        <div class="bg-light rounded h-100 p-4">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h6 class="mb-0">Unassigned Task List</h6>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr class="text-dark">
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Title Task</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Assignee</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for task in unassigned_task_list %}
+                    <tr>
+                        <td>{{ task.creation_date | date:"d.m.Y" }}</td>
+                        <td>{{ task.creation_date | date:"H:i" }}</td>
+                        <td>{{ task.title }}</td>
+                        <td>{{ task.get_status_display }}</td>
+                        <td>
+                            {% if task.assignee_user %}
+                            {% if not task.assignee_user.user.first_name and not task.user.assignee_user.last_name %}
+                            {{ task.assignee_user }}
+                            {% else %}
+                            {{ task.assignee_user.user.first_name }} {{ task.assignee_user.user.last_name }}
+                            {% endif %}
+                            {% else %}
+                            Not Assigned
+                            {% endif %}
+                        </td>
+                        <td><a class="btn btn-sm btn-primary" href="{% url 'task_detail' task.pk %}">Detail</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">No Task In List</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div class="col-sm-12 col-xl-3">
+
     </div>
 </div>
 {% endblock content %}

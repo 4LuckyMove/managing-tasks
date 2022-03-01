@@ -5,14 +5,14 @@ from django.utils.translation import gettext_lazy as _
 
 
 class AssignUserTask(models.Model):
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         get_user_model(),
         verbose_name='Assignee user',
         on_delete=models.CASCADE,
     )
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
     class Meta:
         verbose_name = 'Assign User'
@@ -32,18 +32,18 @@ class Task(models.Model):
         default='not-completed'
     )
     creation_date = models.DateTimeField('Creation date', auto_now_add=True)
-    owner = models.ForeignKey(
-        get_user_model(),
+    owner = models.CharField(
         verbose_name='Owner',
-        on_delete=models.CASCADE,
+        max_length=150,
         blank=True,
         null=True,
     )
     assignee_user = models.ForeignKey(
-        AssignUserTask,
+        get_user_model(),
         verbose_name='Assignee',
         on_delete=models.CASCADE,
         blank=True,
+        null=True,
     )
 
     def __str__(self):

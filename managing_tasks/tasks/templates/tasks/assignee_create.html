@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Edit User | Task Tracker{% endblock title %}
+{% block title %}Add New Assigned User | Task Tracker{% endblock title %}
 
 {% block other-stylesheet %}{% endblock other-stylesheet %}
 
@@ -9,7 +9,7 @@
 <div class="row g-4">
     <div class="col-sm-12 col-xl-12">
         <div class="bg-light rounded h-100 p-4">
-            <h6 class="mb-4">Edit User</h6>
+            <h6 class="mb-4">Add New Assigned User</h6>
             <form action="." method="post">
                 {% csrf_token %}
                 <span class="form-error text-danger">{{ form.non_field_errors }}</span>
@@ -22,6 +22,16 @@
                     {{ form.email }}
                     <label for="{{ form.email.id_for_label }}">E-mail</label>
                     <span class="form-error text-danger">{{ form.email.errors }}</span>
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form.password1 }}
+                    <label for="{{ form.password1.id_for_label }}">Password</label>
+                    <span class="form-error text-danger">{{ form.password1.errors }}</span>
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form.password2 }}
+                    <label for="{{ form.password2.id_for_label }}">Repeat Password</label>
+                    <span class="form-error text-danger">{{ form.password2.errors }}</span>
                 </div>
                 <div class="form-floating mb-3">
                     {{ form.first_name }}
@@ -38,8 +48,8 @@
                         <button type="submit" class="btn btn-success rounded-pill m-2 col-sm-12 col-xl-12">Save</button>
                     </div>
                     <div class="col-sm-4 col-xl-2">
-                        <a href="{{ user.get_absolute_url }}" class="btn btn-outline-secondary rounded-pill m-2 col-sm-12 col-xl-12">
-                            Cancel
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill m-2 col-sm-12 col-xl-12">
+                            Back to Homepage
                         </a>
                     </div>
                 </div>

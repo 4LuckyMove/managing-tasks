@@ -67,9 +67,27 @@
                     </div>
                     <div class="col-sm-12 col-xl-10">
                         {% if not task_detail.owner.first_name and not task_detail.owner.last_name %}
-                        {{ task_detail.owner.username }}
+                        {{ task_detail.owner }}
                         {% else %}
                         {{ task_detail.owner.first_name }} {{ task_detail.owner.last_name }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-secondary" role="alert">
+                <div class="row g-2">
+                    <div class="col-sm-12 col-xl-2">
+                        <strong>Assignee:</strong>
+                    </div>
+                    <div class="col-sm-12 col-xl-10">
+                        {% if task_detail.assignee_user %}
+                        {% if not task_detail.assignee_user.user.first_name and not task_detail.user.assignee_user.last_name %}
+                        {{ task_detail.assignee_user }}
+                        {% else %}
+                        {{ task_detail.assignee_user.user.first_name }} {{ task_detail.assignee_user.user.last_name }}
+                        {% endif %}
+                        {% else %}
+                        Not Assigned
                         {% endif %}
                     </div>
                 </div>
