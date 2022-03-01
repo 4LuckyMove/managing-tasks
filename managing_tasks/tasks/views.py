@@ -19,7 +19,8 @@ class HomeTaskListView(LoginRequiredMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(HomeTaskListView, self).get_context_data(**kwargs)
         context['task_list'] = context['task_list'].filter(
-            Q(owner=self.request.user) &
+            (Q(owner=self.request.user) |
+             Q(assignee_user=self.request.user)) &
             Q(assignee_user__isnull=False)
         ).order_by('-creation_date')
         context['unassigned_task_list'] = Task.objects.filter(
@@ -54,6 +55,8 @@ class HomeTaskListView(LoginRequiredMixin, ListView):
             task_filter = Task.objects.all()
 
         return task_filter
+
+
 
 
 class TaskDetailView(LoginRequiredMixin, DetailView):
@@ -95,11 +98,7 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
     login_url = 'login'
 
     def form_valid(self, form):
-        full_name = self.request.user.first_name + ' ' + self.request.user.last_name
-        if self.request.user.first_name and self.request.user.last_name:
-            form.instance.owner = full_name
-        else:
-            form.instance.owner = self.request.user
+        form.instance.owner = self.request.user
         return super(TaskCreateView, self).form_valid(form)
 
 

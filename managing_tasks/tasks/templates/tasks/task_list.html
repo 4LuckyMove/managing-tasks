@@ -24,6 +24,7 @@
                         <th scope="col">Time</th>
                         <th scope="col">Title Task</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Owner</th>
                         <th scope="col">Assignee</th>
                         <th scope="col">Action</th>
                     </tr>
@@ -35,6 +36,7 @@
                         <td>{{ task.creation_date | date:"H:i" }}</td>
                         <td>{{ task.title }}</td>
                         <td>{{ task.get_status_display }}</td>
+                        <td>{{ task.owner }}</td>
                         <td>
                             {% if task.assignee_user %}
                             {% if not task.assignee_user.user.first_name and not task.user.assignee_user.last_name %}
@@ -50,7 +52,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="6" class="text-center">No Task In List</td>
+                        <td colspan="7" class="text-center">No Task In List</td>
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -137,6 +139,7 @@
                         <th scope="col">Time</th>
                         <th scope="col">Title Task</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Owner</th>
                         <th scope="col">Assignee</th>
                         <th scope="col">Action</th>
                     </tr>
@@ -148,6 +151,7 @@
                         <td>{{ task.creation_date | date:"H:i" }}</td>
                         <td>{{ task.title }}</td>
                         <td>{{ task.get_status_display }}</td>
+                        <td>{{ task.owner }}</td>
                         <td>
                             {% if task.assignee_user %}
                             {% if not task.assignee_user.user.first_name and not task.user.assignee_user.last_name %}
@@ -163,7 +167,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="6" class="text-center">No Task In List</td>
+                        <td colspan="7" class="text-center">No Task In List</td>
                     </tr>
                     {% endfor %}
                     </tbody>
